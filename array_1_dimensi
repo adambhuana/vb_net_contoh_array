@@ -1,0 +1,91 @@
+Public Class Form8
+    Private boxes(5) As TextBox
+    Public Shared a As Integer
+    Public array(5), number1 As Integer
+    Private Sub Form8_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        input.Enabled = False
+    End Sub
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If (txtbox1.Text <> "") Then
+            Dim number, b As Integer
+            If Integer.TryParse(txtbox1.Text, number) Then
+                a = number
+            End If
+            If (a <> 0 And a >= 1 And a <= 5) Then
+                Dim newbox As TextBox
+                For i As Integer = 0 To a - 1
+                    'create a new textbox and set its properties
+                    newbox = New TextBox
+
+                    newbox = New TextBox
+                    newbox.Size = New Drawing.Size(100, 20)
+                    newbox.Location = New Point(10, 70 + 25 * (i - 1))
+                    newbox.Name = "TextBox" & i
+                    newbox.Text = ""
+                    'connect it to a handler, save a reference to the array and add it to the form controls
+                    AddHandler newbox.TextChanged, AddressOf TextBox_TextChanged
+                    AddHandler newbox.KeyPress, AddressOf TextBox_KeyPress
+                    boxes(i) = newbox
+                    Me.Controls.Add(newbox)
+
+                Next
+                Button1.Enabled = False
+                txtbox1.Enabled = False
+                input.Enabled = True
+                'End If
+            Else
+                lblproses.Text = "Maaf Input harus diisi dengan" + vbNewLine + "lebih besar dari nol dan " + vbNewLine + "kurang dari/sama dengan 5"
+                Button1.Enabled = False
+                txtbox1.Enabled = False
+            End If
+        Else
+            lblproses.Text = "Maaf Input harus diisi dengan" + vbNewLine + "lebih besar dari nol dan " + vbNewLine + "kurang dari/sama dengan 5"
+            Button1.Enabled = False
+            txtbox1.Enabled = False
+        End If
+
+    End Sub
+    Private Sub TextBox_TextChanged(sender As System.Object, e As System.EventArgs)
+        'when you modify the contents of any textbox, the name of that textbox and
+        'its current contents will be displayed in the title bar
+        Dim box As TextBox = DirectCast(sender, TextBox)
+        Me.Text = box.Name & ": " & box.Text
+    End Sub
+    Private Sub TextBox_KeyPress(sender As System.Object, e As KeyPressEventArgs)
+        'when you modify the contents of any textbox, the name of that textbox and
+        'its current contents will be displayed in the title bar
+        Dim box As TextBox = DirectCast(sender, TextBox)
+        If Not IsNumeric(e.KeyChar) And Not e.KeyChar = ChrW(Keys.Back) Then
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub reset_Click(sender As Object, e As EventArgs) Handles reset.Click
+        Me.Close()
+        My.Forms.Form8.Show()
+
+    End Sub
+
+
+
+    Private Sub txtbox1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtbox1.KeyPress
+        If Not IsNumeric(e.KeyChar) And Not e.KeyChar = ChrW(Keys.Back) Then
+            e.Handled = True
+        End If
+    End Sub
+
+
+    Private Sub input_Click(sender As Object, e As EventArgs) Handles input.Click
+        For x As Integer = 0 To a - 1
+            array(x) = boxes(x).Text
+            lblproses.Text = "Nilai Index: " + x.ToString + " = " + array(x).ToString
+            MsgBox("Nilai Index: " + x.ToString + " = " + array(x).ToString)
+
+        Next
+        For x As Integer = 0 To a - 1
+            boxes(x).Enabled = False
+            Button1.Enabled = False
+            input.Enabled = False
+        Next
+    End Sub
+End Class
